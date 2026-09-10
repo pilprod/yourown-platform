@@ -26,6 +26,12 @@ type rule struct {
 }
 
 var patterns = []rule{
+	// UUIDs can identify Azure tenants, subscriptions, clients and principals.
+	// This deliberately also flags unrelated literal UUIDs for maintainer review.
+	{"literal-guid", regexp.MustCompile(`(?i)\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b`)},
+	{"azure-private-endpoint", regexp.MustCompile(`(?i)\b[a-z0-9-]+\.(?:vault\.azure\.net|blob\.core\.windows\.net|azurecr\.io)\b`)},
+	{"azure-storage-credential", regexp.MustCompile(`(?i)(?:AccountKey|SharedAccessSignature)\s*=\s*[A-Za-z0-9+/=%]{16,}`)},
+	{"sas-signature", regexp.MustCompile(`(?i)[?&]sig=[A-Za-z0-9%+/=]{16,}`)},
 	{"private-key", regexp.MustCompile(`-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----`)},
 	{"cloud-account-number", regexp.MustCompile(`\b[0-9]{12,13}\b`)},
 	{"service-account-address", regexp.MustCompile(`[A-Za-z0-9._-]+@[A-Za-z0-9.-]+\.iam\.gserviceaccount\.com`)},

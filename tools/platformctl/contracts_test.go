@@ -16,6 +16,9 @@ func TestContractCLI(t *testing.T) {
 		want int
 	}{
 		{"validate", []string{"validate", "--file", filepath.Join(root, "gcp-environment.json")}, 0},
+		{"validate-azure", []string{"validate", "--file", filepath.Join(root, "azure-environment.json")}, 0},
+		{"validate-aks", []string{"validate", "--file", filepath.Join(root, "azure-aks-environment.json")}, 0},
+		{"verify-azure", []string{"verify-config", "--file", filepath.Join(root, "azure-environment.json"), "--snapshot", filepath.Join(root, "synthetic-snapshot.json")}, 0},
 		{"verify", []string{"verify-config", "--file", filepath.Join(root, "gcp-environment.json"), "--snapshot", filepath.Join(root, "synthetic-snapshot.json")}, 0},
 		{"missing", []string{"validate"}, 2},
 		{"unknown-flag", []string{"validate", "--token=do-not-echo-this"}, 2},

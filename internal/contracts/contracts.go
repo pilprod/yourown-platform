@@ -136,7 +136,7 @@ func Validate(data []byte) (any, error) {
 	}
 	switch v := doc.(type) {
 	case *Environment:
-		validRuntime := v.Provider == "gcp" && (v.Runtime == "cloud-run" || v.Runtime == "gke") || v.Provider == "aws" && (v.Runtime == "ecs" || v.Runtime == "eks")
+		validRuntime := v.Provider == "gcp" && (v.Runtime == "cloud-run" || v.Runtime == "gke") || v.Provider == "aws" && (v.Runtime == "ecs" || v.Runtime == "eks") || v.Provider == "azure" && (v.Runtime == "container-apps" || v.Runtime == "aks")
 		if !nameRE.MatchString(v.Name) || !validRuntime || !reference(v.Configuration.Ref, "config", 2) || !hashRE.MatchString(v.Configuration.SHA256) {
 			return nil, reject("environment-policy")
 		}

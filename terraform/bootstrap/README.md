@@ -64,3 +64,7 @@ References:
 - https://developer.hashicorp.com/terraform/language/backend/s3
 - https://github.com/hashicorp/terraform-provider-google/releases/tag/v8.2.0
 - https://github.com/hashicorp/terraform-provider-aws/releases/tag/v6.64.0
+
+## Azure extension
+
+The same trust-first scope now includes `bootstrap/azure` and `modules/azure/stack-identity`. Follow the [Azure runbook](azure/README.md): this root uses private Azure Blob state with Entra authentication, a separate identity resource group, explicit tenant/subscription binding and user-assigned identities for each HCP phase. No roles are granted by default. Include the Azure module in the local mock-test loop above. Azure has five additional authored test runs, not executed. The Azure root pins AzureRM 5.5.0; do not apply v4 resource argument examples to it without checking the v5 schema.

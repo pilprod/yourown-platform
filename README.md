@@ -1,8 +1,8 @@
 # YourOwn Platform
 
-Shared infrastructure core for all YourOwn projects on Google Cloud and AWS, with Cloudflare and administrative MCP integrations.
+Shared infrastructure core for all YourOwn projects on Google Cloud, AWS and Microsoft Azure, with Cloudflare and administrative MCP integrations.
 
-**Status: contracts and OIDC bootstrap source, not a deployed cloud platform.** Reference contracts and Go tooling are locally tested. GCP/AWS trust modules and bootstrap roots are implemented source with Terraform/cloud validation pending; operational HCP Stacks, runtimes, Cloudflare and MCP remain planned. No cloud credentials are required for the Go checks.
+**Status: contracts and OIDC bootstrap source, not a deployed cloud platform.** Reference contracts and Go tooling are locally tested. GCP/AWS/Azure trust modules and bootstrap roots are implemented source with Terraform/cloud validation pending; operational HCP Stacks, runtimes, Cloudflare and MCP remain planned. No cloud credentials are required for the Go checks.
 
 ## Scope
 
@@ -44,7 +44,7 @@ docs/         decisions, implementation plan and migration runbooks
 examples/     synthetic configurations only
 ```
 
-Empty capability areas contain an explicit status document rather than fake resources or untested deployment examples. Follow the implementation plan before adding a provider.
+Empty capability areas contain an explicit status document rather than fake resources or untested deployment examples. Follow the implementation plan before adding a capability.
 
 ## Licensing
 
@@ -52,4 +52,8 @@ The source is public. An explicit open-source license is a maintainer decision b
 
 ## Second increment: reference contracts and bootstrap source
 
-See [contracts](contracts/README.md) for the implemented Go commands and [OIDC bootstrap](terraform/bootstrap/README.md) for GCP/AWS roots and authored Terraform tests. Neither cloud has been provisioned or accepted. GitHub CI is deferred by maintainer instruction; its workflow files are retained unchanged. The current source/evidence distinction is tracked in [implementation status](docs/implementation.md).
+See [contracts](contracts/README.md) for the implemented Go commands and [OIDC bootstrap](terraform/bootstrap/README.md) for GCP/AWS roots and the [Azure runbook](terraform/bootstrap/azure/README.md) for the Azure root and authored Terraform tests. None of the three clouds has been provisioned or accepted. GitHub CI is deferred by maintainer instruction; its workflow files are retained unchanged. The current source/evidence distinction is tracked in [implementation status](docs/implementation.md).
+
+## Azure extension
+
+Azure is a first-class target, not an alias for AWS or GCP. The contract vocabulary now accepts `azure + container-apps` and `azure + aks`. Azure trust/bootstrap source creates separate phase identities; it does not deploy Container Apps, AKS, ACR, Key Vault or Azure Pipelines. See [Azure capabilities](terraform/modules/azure/README.md) and [ADR 0005](docs/adr/0005-azure-target.md). Real tenant, subscription, client IDs and service endpoints stay private. GitHub workflows remain unchanged and deferred.

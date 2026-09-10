@@ -25,7 +25,8 @@
     "provider": {
       "enum": [
         "gcp",
-        "aws"
+        "aws",
+        "azure"
       ]
     },
     "runtime": {
@@ -33,7 +34,9 @@
         "cloud-run",
         "gke",
         "ecs",
-        "eks"
+        "eks",
+        "container-apps",
+        "aks"
       ]
     },
     "configuration": {
@@ -89,6 +92,25 @@
             "enum": [
               "ecs",
               "eks"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "provider": {
+            "const": "azure"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "runtime": {
+            "enum": [
+              "container-apps",
+              "aks"
             ]
           }
         }
