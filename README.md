@@ -2,7 +2,7 @@
 
 Shared infrastructure core for all YourOwn projects on Google Cloud and AWS, with Cloudflare and administrative MCP integrations.
 
-**Status: repository foundation, not a deployed cloud platform.** GCP/AWS modules, actual HCP Stacks, Cloudflare resources and MCP servers are planned work. No credentials or cloud account are required to run the current checks.
+**Status: contracts and OIDC bootstrap source, not a deployed cloud platform.** Reference contracts and Go tooling are locally tested. GCP/AWS trust modules and bootstrap roots are implemented source with Terraform/cloud validation pending; operational HCP Stacks, runtimes, Cloudflare and MCP remain planned. No cloud credentials are required for the Go checks.
 
 ## Scope
 
@@ -27,7 +27,7 @@ Use the pinned Go toolchain from `.go-version` for CI-equivalent validation. The
 make check
 ```
 
-`platformctl scan --root .` checks **tracked working-tree files**. Stage new files before scanning. It reports rule names and locations, never matched values. Gitleaks is a separate CI gate for secret detection. Neither scanner guarantees that every possible secret or deployment identifier will be found. Git history is covered separately by Gitleaks; the inventory guard currently checks the working tree only.
+`platformctl scan --root .` checks **tracked working-tree files**. Stage new files before scanning. It reports rule names and locations, never matched values. Gitleaks is configured as a separate, currently deferred CI check for secret detection. Neither scanner guarantees that every possible secret or deployment identifier will be found. History scanning is configured separately through Gitleaks but has not been executed for this increment; the inventory guard currently checks the working tree only.
 
 ## Layout
 
@@ -49,3 +49,7 @@ Empty capability areas contain an explicit status document rather than fake reso
 ## Licensing
 
 The source is public. An explicit open-source license is a maintainer decision before the first release. No existing repository history or third-party implementation has been copied into this foundation.
+
+## Second increment: reference contracts and bootstrap source
+
+See [contracts](contracts/README.md) for the implemented Go commands and [OIDC bootstrap](terraform/bootstrap/README.md) for GCP/AWS roots and authored Terraform tests. Neither cloud has been provisioned or accepted. GitHub CI is deferred by maintainer instruction; its workflow files are retained unchanged. The current source/evidence distinction is tracked in [implementation status](docs/implementation.md).
