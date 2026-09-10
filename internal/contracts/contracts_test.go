@@ -19,7 +19,7 @@ func example(t *testing.T, name string) []byte {
 	return b
 }
 func TestExamples(t *testing.T) {
-	for _, name := range []string{"gcp-environment", "aws-environment", "workload", "release", "secret-reference"} {
+	for _, name := range []string{"gcp-environment", "aws-environment", "azure-environment", "azure-aks-environment", "azure-secret-reference", "workload", "release", "secret-reference"} {
 		t.Run(name, func(t *testing.T) {
 			if _, e := Validate(example(t, name)); e != nil {
 				t.Fatal(e)

@@ -6,7 +6,7 @@ Status: proposed for maintainer acceptance with the foundation PR.
 
 GitHub public CI performs local validation and security tests with contents:read and no cloud credentials. HCP runs real plans/applies privately after trusted changes and explicit approval. Never expose a production plan in a public PR comment or artifact.
 
-Use short-lived OIDC for HCP/GCP/AWS where supported, distinct identities for plan/apply and narrow target trust conditions. A public repository path alone is not sufficient trust. Cloudflare credentials remain separately scoped and private.
+Use short-lived OIDC for HCP/GCP/AWS/Azure where supported, distinct identities for plan/apply and narrow target trust conditions. A public repository path alone is not sufficient trust. Cloudflare credentials remain separately scoped and private.
 
 Terraform owns infrastructure and the workload fields explicitly assigned to it. Product build pipelines produce immutable image digests; the first Cloud Run delivery path submits the digest to the workload Stack. Do not also let Cloud Deploy overwrite the same revision configuration. Kubernetes delivery has one declared reconciler; application schema migrations belong to the product.
 

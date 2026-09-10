@@ -6,9 +6,9 @@ Status: proposed for maintainer acceptance with the foundation PR.
 
 Maintain one public repository for infrastructure implementation and administrative tooling across YourOwn products. Keep product code and runtime user data outside it. Implement first-party executable tools in Go and cloud resources through Terraform modules composed by HCP Stacks.
 
-Separate foundation, network, runtime, data, delivery and edge ownership. Create instances per target/environment as needed; do not make the entire platform one state. Cloud Run/ECS and GKE/EKS expose explicit provider semantics rather than a misleading generic container abstraction.
+Separate foundation, network, runtime, data, delivery and edge ownership. Create instances per target/environment as needed; do not make the entire platform one state. Cloud Run/ECS/Container Apps and GKE/EKS/AKS expose explicit provider semantics rather than a misleading generic container abstraction.
 
-GCP, AWS and Cloudflare are all in scope. Implement GCP serverless as the first vertical deployment slice, alongside AWS baseline identity and configuration. Kubernetes and expensive shared services remain optional. Document capability maturity.
+GCP, AWS, Azure and Cloudflare are all in scope. Implement GCP serverless as the first vertical deployment slice, alongside AWS and Azure baseline identity and configuration. Kubernetes and expensive shared services remain optional. Document capability maturity.
 
 Platform administrative MCP is separate from product MCP. Initial tooling is read-only, with target allowlists and server-side authorization. Proposals and plan requests require review; production apply remains an independently approved action.
 

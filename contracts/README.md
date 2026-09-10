@@ -2,7 +2,7 @@
 
 Implemented: Environment, Workload, Release and SecretReference schemas and a matching Go validator. All fields are required; use an empty secrets array when none are needed. Unknown fields, null and case aliases are rejected. The Go validator additionally rejects duplicate JSON keys, duplicate secret names, documents over one MiB and nesting over thirty-two levels. JSON Schema alone cannot detect duplicate JSON keys.
 
-This is an alpha vocabulary, not a deployment API. It does not guarantee compatibility with an implemented runtime. Provider-specific sizing/network/ingress contracts will be added with each runtime, rather than pretending ECS and Cloud Run have identical semantics.
+This is an alpha vocabulary, not a deployment API. It does not guarantee compatibility with an implemented runtime. Provider-specific sizing/network/ingress contracts will be added with each runtime, rather than pretending ECS, Cloud Run and Azure Container Apps have identical semantics.
 
 ## Local commands
 
@@ -21,3 +21,21 @@ go run ./tools/platformctl verify-config \
 ## Remaining integration work
 
 Implement provider-specific snapshot readers and HCP input wiring, verify their store/ephemeral semantics, and prove plan/apply input stability privately. This increment does not implement a generic YAML-to-Terraform language or create operational `.tfdeploy.hcl` files. Issues #4 and #5 remain open until their private acceptance criteria pass.
+
+## Provider/runtime vocabulary
+
+| Provider | Accepted runtime values | Runtime implementation |
+|---|---|---|
+| `gcp` | `cloud-run`, `gke` | Planned |
+| `aws` | `ecs`, `eks` | Planned |
+| `azure` | `container-apps`, `aks` | Planned |
+
+Cross-provider pairs and case aliases are rejected. Azure does not add tenant/subscription/client IDs to public Environment fields. An Azure Blob configuration binding, ACR repository URI or Key Vault secret identifier is resolved privately from the existing logical reference. The Azure secret example uses a synthetic explicit version; it is not a real vault reference. Actual provider-specific version validation belongs in the private resolver and remains unimplemented.
+
+```sh
+go run ./tools/platformctl validate --file examples/contracts/azure-environment.json
+go run ./tools/platformctl validate --file examples/contracts/azure-aks-environment.json
+go run ./tools/platformctl verify-config \
+  --file examples/contracts/azure-environment.json \
+  --snapshot examples/contracts/synthetic-snapshot.json
+```

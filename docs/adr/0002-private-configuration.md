@@ -12,7 +12,7 @@ Generated infrastructure values move through component outputs or explicitly pub
 
 Verify store/variable-set semantics on the selected Stacks engine before finalizing .tfdeploy.hcl. Stable store values are not assumed to be a universal mutable configuration mechanism. Verify provider authentication, relative module sources, private metadata leakage in logs, and upstream output constraints in a disposable private target. No untested .tfdeploy.hcl file is claimed operational in this foundation.
 
-Bootstrap may use a separate classic Terraform root with a private backend. The operator supplies target bindings privately. No real values are requested in public issues. A versioned GCS/S3 configuration reader is a candidate, not an already implemented backend.
+Bootstrap may use a separate classic Terraform root with a private backend. The operator supplies target bindings privately. No real values are requested in public issues. A versioned GCS/S3/Azure Blob configuration reader is a candidate, not an already implemented backend.
 
 ## Security boundaries
 

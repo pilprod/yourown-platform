@@ -1,0 +1,11 @@
+{
+  "apiVersion": "platform.yourown/v1alpha1",
+  "kind": "Environment",
+  "name": "sandbox",
+  "provider": "azure",
+  "runtime": "aks",
+  "configuration": {
+    "ref": "config://sandbox/revision-a",
+    "sha256": "c22153d66543b0f606fd3d40208d2d97a34831c1ed8b8d75c32b678a8ada8690"
+  }
+}
