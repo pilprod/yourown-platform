@@ -1,30 +1,30 @@
 # Implementation plan
 
-## Current increment: repository foundation
+## Current increment: contracts and OIDC bootstrap source
 
-Reviewable source, instructions, architecture decisions, a working Go repository guard with tests, and credential-free CI. This is not an implemented multi-cloud runtime. The initial README commit only initializes the repository; substantive work is reviewed separately.
+Implemented locally: four reference-only JSON contracts, strict Go validation, exact-byte configuration snapshot verification, phase-scoped HCP trust modules, and GCP/AWS bootstrap roots. Provider-specific private snapshot retrieval, operational HCP Stacks and cloud token exchange remain unimplemented/unverified. This is not a deployed multi-cloud platform.
 
-## Ordered backlog
+## Maintainer decision: GitHub CI deferred
 
-| Phase | Deliverable | Acceptance boundary |
+On 2026-09-10 the maintainer instructed us to continue without GitHub CI, preserving the existing workflow files. CI is not the current implementation blocker. Do not delete or modify the workflows merely to bypass their earlier failure. Use local validation evidence and skip workflow execution for these development commits. Do not claim the deferred checks passed.
+
+The next PR is based on the unmerged foundation branch; neither it nor the foundation is automatically merged. License selection, repository settings and release governance remain separate tasks, not an excuse to stop contract/bootstrap implementation.
+
+## Capability state
+
+| Capability | State | Evidence boundary |
 |---|---|---|
-| P0 | Foundation review and governance | Local checks pass; public CI verified; maintainer configures protections and chooses license |
-| P1 | Private configuration and HCP Stacks contract | Pin inputs per run; demonstrate plan/apply stability and no public inventory leakage |
-| P1 | GCP/AWS OIDC bootstrap | Distinct scoped identities; valid target succeeds; wrong target/audience fails; no static cloud key |
-| P1 | GCP Cloud Run vertical slice | Two isolated targets; deploy immutable digest; unauthorized service calls denied; rollback proven |
-| P1 | Cloudflare edge and admin boundaries | No origin bypass without an authenticated policy; MCP streaming works; no product-to-admin privilege path |
-| P1 | Read-only platform MCP | Authorized inventory/status only; target isolation; no raw secret/plan disclosure or mutation tool |
-| P2 | AWS workload delivery | ECS semantics explicit; same public contract where meaningful; networking and idle costs measured |
-| P2 | Kubernetes profiles and Chat migration | GKE/EKS modules tested; one reconciler; ownership transfer without duplicate management |
+| Repository guard and Go CLI | Implemented; locally tested | No complete history/secret audit claimed |
+| Environment/workload/release/secret contracts | Implemented; locally tested | Alpha vocabulary; no runtime provisioning |
+| Snapshot checksum verification | Implemented; locally tested | No fetching, manifest authentication or HCP binding |
+| HCP phase-subject and GCP/AWS trust source | Implemented source | Terraform tests authored; CLI/provider and live verification pending |
+| HCP Stack configuration injection | Planned | Prove pinned inputs across plan/apply privately |
+| Cloud Run / ECS runtimes and delivery | Planned | Implement only after configuration and auth acceptance |
+| Cloudflare and administrative MCP | Planned | Independent identity/authorization boundary |
+| Network/data/Kubernetes/Chat migration | Planned | Opt-in costs and separately approved state ownership |
 
-A task is done only with the evidence stated in its linked GitHub issue. Static validation is not a cloud acceptance test. Architecture decisions are proposed until reviewed.
+## Next acceptance boundary
 
-## Cost and safety gates
+Resolve actual private HCP input wiring and phase-aware provider selection, install/pin the Terraform toolchain and verify the authored modules with mock tests. Then approve a disposable target, attach minimal scoped permissions and run positive/negative token-exchange tests in both clouds. Only then implement the first GCP Cloud Run + Cloudflare deployment.
 
-No cloud resource is created by this foundation. Before provisioning, record selected region, resource inventory, recurring cost estimate, spending alerts and teardown procedure privately. Do not assume HCP Stacks, NAT, load balancers, clusters or HA databases are free.
-
-## First cloud acceptance slice
-
-Provision a disposable GCP target and one container service from a pinned digest, with a second private IAM-protected service, through reviewed HCP Stacks and private configuration. Attach a separately authenticated Cloudflare edge, test direct-origin requests, revoke an identity, update the image, roll back, and tear down. Repeat in a second target without editing reusable modules or committing live identifiers.
-
-AWS bootstrap is developed in the same foundation phase. AWS application runtime and Kubernetes are separate acceptance slices rather than a promise of feature parity on day one.
+Every target needs a privately recorded region, resource inventory, cost estimate, spending alerts and teardown plan. Nothing in this increment authorizes creating resources or migrating live Chat state. Keep all real identifiers, outputs, plans and authentication evidence private.

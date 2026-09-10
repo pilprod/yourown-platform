@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "workload v1alpha1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "apiVersion",
+    "kind",
+    "name",
+    "environmentRef",
+    "image",
+    "secrets"
+  ],
+  "properties": {
+    "apiVersion": {
+      "const": "platform.yourown/v1alpha1"
+    },
+    "kind": {
+      "const": "Workload"
+    },
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]{0,62}$"
+    },
+    "environmentRef": {
+      "type": "string",
+      "pattern": "^environment://[a-z][a-z0-9-]{0,62}$"
+    },
+    "image": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repositoryRef",
+        "digest"
+      ],
+      "properties": {
+        "repositoryRef": {
+          "type": "string",
+          "pattern": "^artifact://[a-z][a-z0-9-]{0,62}$"
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        }
+      }
+    },
+    "secrets": {
+      "type": "array",
+      "maxItems": 32,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "ref",
+          "version"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]{0,62}$"
+          },
+          "ref": {
+            "type": "string",
+            "pattern": "^secret://[a-z][a-z0-9-]{0,62}/[a-z][a-z0-9-]{0,62}$"
+          },
+          "version": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$",
+            "not": {
+              "pattern": "^(?:[Ll][Aa][Tt][Ee][Ss][Tt]|[Cc][Uu][Rr][Rr][Ee][Nn][Tt]|[Aa][Ww][Ss][Cc][Uu][Rr][Rr][Ee][Nn][Tt]|[Aa][Ww][Ss][Pp][Rr][Ee][Vv][Ii][Oo][Uu][Ss])$"
+            }
+          }
+        }
+      }
+    }
+  }
+}

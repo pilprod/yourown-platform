@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "environment v1alpha1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "apiVersion",
+    "kind",
+    "name",
+    "provider",
+    "runtime",
+    "configuration"
+  ],
+  "properties": {
+    "apiVersion": {
+      "const": "platform.yourown/v1alpha1"
+    },
+    "kind": {
+      "const": "Environment"
+    },
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]{0,62}$"
+    },
+    "provider": {
+      "enum": [
+        "gcp",
+        "aws"
+      ]
+    },
+    "runtime": {
+      "enum": [
+        "cloud-run",
+        "gke",
+        "ecs",
+        "eks"
+      ]
+    },
+    "configuration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ref",
+        "sha256"
+      ],
+      "properties": {
+        "ref": {
+          "type": "string",
+          "pattern": "^config://[a-z][a-z0-9-]{0,62}/[a-z][a-z0-9-]{0,62}$"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "provider": {
+            "const": "gcp"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "runtime": {
+            "enum": [
+              "cloud-run",
+              "gke"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "provider": {
+            "const": "aws"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "runtime": {
+            "enum": [
+              "ecs",
+              "eks"
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

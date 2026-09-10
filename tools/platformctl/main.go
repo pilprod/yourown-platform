@@ -11,8 +11,11 @@ import (
 func main() { os.Exit(run(os.Args[1:])) }
 
 func run(args []string) int {
+	if len(args) > 0 && (args[0] == "validate" || args[0] == "verify-config") {
+		return contractCommand(args, os.Stdout, os.Stderr)
+	}
 	if len(args) == 0 || args[0] != "scan" {
-		fmt.Fprintln(os.Stderr, "usage: platformctl scan --root <git-worktree>")
+		fmt.Fprintln(os.Stderr, "usage: platformctl scan --root <git-worktree> | validate --file <document> | verify-config --file <environment> --snapshot <private-json>")
 		return 2
 	}
 	flags := flag.NewFlagSet("scan", flag.ContinueOnError)

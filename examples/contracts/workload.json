@@ -1,0 +1,17 @@
+{
+  "apiVersion": "platform.yourown/v1alpha1",
+  "kind": "Workload",
+  "name": "example-api",
+  "environmentRef": "environment://sandbox",
+  "image": {
+    "repositoryRef": "artifact://example-api",
+    "digest": "sha256:abababababababababababababababababababababababababababababababab"
+  },
+  "secrets": [
+    {
+      "name": "database",
+      "ref": "secret://sandbox/database",
+      "version": "1"
+    }
+  ]
+}
