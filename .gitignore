@@ -1,0 +1,28 @@
+# Local execution and private configuration
+.local/
+.env
+.env.*
+*.tfvars
+*.tfvars.json
+*.auto.tfvars
+*.auto.tfvars.json
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+*.plan
+crash.log
+crash.*.log
+kubeconfig
+kubeconfig.*
+*.pem
+*.key
+*.p12
+*.pfx
+*.dump
+*.sqlite
+# Generated artifacts
+bin/
+dist/
+coverage.out
+# Commit Terraform lock files; do not ignore them.
