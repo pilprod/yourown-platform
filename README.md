@@ -2,7 +2,7 @@
 
 Shared infrastructure core for all YourOwn projects on Google Cloud and AWS, with Cloudflare and administrative MCP integrations.
 
-**Status: repository foundation, not a deployed cloud platform.** GCP/AWS modules, actual HCP Stacks, Cloudflare resources and MCP servers are planned work. No credentials or cloud account are required to run the current checks.
+**Status: source implementation; cloud acceptance pending.** Two Terraform Stacks compose reusable GCP capabilities and the agentgateway/Temporal runtime. Cloud resources use pinned official Google modules, with narrow documented exceptions. kagent/Substrate installation, private bootstrap/configuration, AWS, Cloudflare and MCP servers remain planned.
 
 ## Scope
 
@@ -13,10 +13,16 @@ One public codebase does not mean one cloud account, network, database, identity
 ## Start here
 
 - [Implementation plan](docs/implementation.md)
+- [Agents-first Terraform Stacks](docs/adr/0004-agents-first-stacks.md)
+- [GCP platform infrastructure](terraform/stacks/platform-gcp/README.md)
+- [Agent runtime](terraform/stacks/agent-runtime/README.md)
+- [Chat migration scope](docs/migrations/yourown-chat.md)
 - [Architecture decisions](docs/adr/0001-platform-boundaries.md)
 - [Private configuration and state](docs/adr/0002-private-configuration.md)
 - [CI and resource ownership](docs/adr/0003-delivery-ownership.md)
 - [Agent instructions](AGENTS.md)
+- [Shared agent rules and knowledge](rag/README.md)
+- [Terraform knowledge](rag/knowledge/terraform.md)
 - [Security policy](SECURITY.md)
 
 ## Local checks
@@ -32,20 +38,16 @@ make check
 ## Layout
 
 ```text
-terraform/    bootstrap, provider modules and HCP Stacks
-runtime/      reusable Kubernetes/edge runtime components
-delivery/     cloud CI/CD templates and release ownership
-mcp/          administrative integration contracts and policies
-contracts/    public interfaces, not deployed configuration
-policies/     repository and infrastructure policy specifications
+terraform/    HCP Stacks and infrastructure dependency configuration
+runtime/      selected agent runtime boundaries and prerequisites
+rag/          shared development-agent rules, knowledge and adapters
 tools/        first-party Go tooling
 internal/     implementations and tests for first-party Go tooling
 docs/         decisions, implementation plan and migration runbooks
-examples/     synthetic configurations only
 ```
 
-Empty capability areas contain an explicit status document rather than fake resources or untested deployment examples. Follow the implementation plan before adding a provider.
+Planned capabilities are tracked in the [implementation plan](docs/implementation.md#planned-capability-boundaries). Add a directory when its implementation begins.
 
 ## Licensing
 
-The source is public. An explicit open-source license is a maintainer decision before the first release. No existing repository history or third-party implementation has been copied into this foundation.
+The source is public. An explicit open-source license is a maintainer decision before the first release. Official modules and release artifacts retain their upstream licenses. Shared runtime composition is adapted from the maintainer’s Chat reference; provenance and exclusions are recorded in the migration guide. Git history and live deployment configuration are not copied.

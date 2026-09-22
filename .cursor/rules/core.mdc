@@ -1,0 +1,6 @@
+---
+description: Shared development-agent rules for every repository task
+alwaysApply: true
+---
+
+Read and follow [canonical core rules](../../rag/rules/core.md) before working. Load applicable topic rules as directed there. All clients share these files; do not duplicate policy in editor adapters.

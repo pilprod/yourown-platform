@@ -1,11 +1,14 @@
 # Terraform capabilities
 
-Status: planned. No deployable .tf or Stack configuration is included yet.
+Two source Stacks separate cloud resources from in-cluster runtime ownership:
 
-- bootstrap/: classic root configurations for initial HCP/GCP/AWS trust and private state.
-- modules/gcp/: provider-specific reusable project, IAM, network, registry, runtime, data and delivery blocks.
-- modules/aws/: provider-specific baseline, IAM, network, ECR, ECS/EKS, RDS, storage and delivery blocks.
-- modules/cloudflare/: edge, DNS/security, Access, optional Tunnel/Workers and administrative MCP integration.
-- stacks/: HCP composition separated by provider, lifecycle and owner.
+- [platform-gcp](stacks/platform-gcp/README.md): network and opt-in GKE, registries, workload identities, KMS, storage, PostgreSQL, secret containers and billing prerequisites.
+- [agent-runtime](stacks/agent-runtime/README.md): existing-cluster authentication, Gateway API, agentgateway and Temporal.
 
-Add only the capability implemented by an active task. Modules contain typed inputs/outputs and no embedded provider credentials, account bindings, backends or product defaults. Keep deployment-specific configuration private. Pin engine and provider versions when their acceptance spike is complete; commit reviewed provider locks.
+Cloud components use pinned official Google modules directly. The [GCP module directory](modules/gcp/README.md) contains only documented gaps. Runtime modules compose official release artifacts with namespace, RBAC, TLS and network policy. kagent/Substrate installation, private deployment binding and cloud acceptance remain outstanding.
+
+Read [agent rules](../rag/rules/terraform.md) and the [context index](../rag/knowledge/terraform.md) before Terraform work. The [Chat migration guide](../docs/migrations/yourown-chat.md) records the transferred capabilities and product boundary.
+
+Run `make terraform-check` for local modules and `make stacks-check` for the actual Stack configurations. These require network access to pinned dependencies and provider binaries, but no cloud credentials. Commit reviewed provider locks; module releases and Git commits remain pinned separately. The public deployment files contain no deployment instances.
+
+Bootstrap roots for trust/private state, AWS and Cloudflare implementation are [planned capabilities](../docs/implementation.md#planned-capability-boundaries). Add their directories when implementation starts.

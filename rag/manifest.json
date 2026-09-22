@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "base": {
+    "rules": [
+      "rag/rules/core.md"
+    ],
+    "knowledge": [
+      "docs/implementation.md"
+    ]
+  },
+  "topics": {
+    "general": {
+      "rules": [],
+      "knowledge": []
+    },
+    "terraform": {
+      "rules": [
+        "rag/rules/terraform.md"
+      ],
+      "knowledge": [
+        "rag/knowledge/terraform.md",
+        "docs/adr/0004-agents-first-stacks.md",
+        "docs/adr/0005-reuse-upstream-terraform-modules.md",
+        "terraform/stacks/platform-gcp/README.md",
+        "terraform/stacks/agent-runtime/README.md",
+        "docs/migrations/yourown-chat.md"
+      ]
+    },
+    "rag": {
+      "rules": [],
+      "knowledge": [
+        "rag/knowledge/retrieval.md",
+        "docs/adr/0006-shared-agent-context.md"
+      ]
+    }
+  }
+}

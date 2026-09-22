@@ -1,0 +1,11 @@
+---
+description: Shared Terraform rules and context for infrastructure work
+globs: "terraform/**,rag/rules/terraform.md,rag/knowledge/terraform.md,docs/adr/*terraform*.md,docs/adr/*stacks*.md"
+alwaysApply: false
+---
+
+# Terraform context entry point
+
+Load [core rules](../../rag/rules/core.md), [Terraform rules](../../rag/rules/terraform.md) and [Terraform knowledge](../../rag/knowledge/terraform.md) before infrastructure changes.
+
+For example, inspect the upstream network module before adding local network resources. Keep the actual policy in canonical files, not this adapter.
