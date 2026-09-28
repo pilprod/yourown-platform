@@ -1,0 +1,65 @@
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && ($CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "web" || $CI_PIPELINE_SOURCE == "api")'
+    - when: never
+
+stages: [validate, plan, apply]
+
+validate:
+  stage: validate
+  image: golang:1.27.1@sha256:3680233e3204827fbdc66088528ae6d4b3d034f51d03a99d454f6de034888244
+  timeout: 10m
+  script:
+    - make check
+
+ci-guards:
+  stage: validate
+  image: python:3.14-slim@sha256:51dafde81dbdb6ebde285137a295cf18a47ca95234fe388a343719cb97305b3d
+  script:
+    - python -m unittest discover -s ci -p 'test_*.py'
+
+.gcp:
+  image: python:3.14-slim@sha256:51dafde81dbdb6ebde285137a295cf18a47ca95234fe388a343719cb97305b3d
+  timeout: 30m
+  resource_group: gcp-bootstrap
+  id_tokens:
+    GCP_OIDC_TOKEN:
+      aud: $GCP_OIDC_AUDIENCE
+  before_script:
+    - apt-get update -qq && apt-get install -y -qq --no-install-recommends git ca-certificates
+  artifacts:
+    access: maintainer
+    when: always
+    expire_in: 1 day
+    paths: [.ci-artifacts/]
+
+gcp-plan:
+  extends: .gcp
+  stage: plan
+  environment:
+    name: gcp/bootstrap
+    action: verify
+  rules:
+    - if: '$YOUROWN_GCP_CI_ENABLED == "true" && $CI_COMMIT_REF_PROTECTED == "true" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && ($CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "web" || $CI_PIPELINE_SOURCE == "api")'
+    - when: never
+  script:
+    - python ci/gcp.py plan
+
+gcp-apply:
+  extends: .gcp
+  stage: apply
+  needs:
+    - job: gcp-plan
+      artifacts: true
+  environment:
+    name: gcp/bootstrap
+    action: start
+  rules:
+    - if: '$YOUROWN_GCP_CI_ENABLED == "true" && $CI_COMMIT_REF_PROTECTED == "true" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && ($CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "web" || $CI_PIPELINE_SOURCE == "api")'
+      when: manual
+      allow_failure: false
+    - when: never
+  manual_confirmation: Apply the reviewed bootstrap plans from this pipeline?
+  script:
+    - python ci/gcp.py apply
