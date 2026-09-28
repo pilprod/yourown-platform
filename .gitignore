@@ -26,3 +26,7 @@ bin/
 dist/
 coverage.out
 # Commit Terraform lock files; do not ignore them.
+# Runner-local tooling and restricted CI artifacts
+.ci-tools/
+.ci-artifacts/
+__pycache__/

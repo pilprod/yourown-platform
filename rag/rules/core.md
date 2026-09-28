@@ -4,7 +4,7 @@ Applies to agents developing this repository, regardless of model or client. Loa
 
 ## Scope
 
-Build the shared YourOwn Platform, not a product backend. GCP, AWS and Cloudflare are first-class integration targets. Use Go for first-party executable tools and MCP adapters. Terraform remains the infrastructure engine; do not build a replacement orchestration language.
+Build reusable cloud and bare-metal infrastructure plus shared platform Helm. The current increment is direct GitLab CI execution of GCP under top-level terragrunt/ (ADRs 0008 and 0009); prepared Azure work is retained. AWS and Cloudflare remain explicit provider targets. Product services, agent code, custom runtime forks, MCP implementations and shared RAG/skills belong in separate repositories. Terraform remains the infrastructure engine; Terragrunt Stacks compose new cloud work as recorded in ADR 0007.
 
 ## Checkout and context
 
@@ -16,9 +16,11 @@ For any Terraform task, including infrastructure design, dependency selection an
 
 - Never commit credentials, real IP/CIDR literals, account/billing/project IDs, deployed origins, private inventories, state, plans, production renders or kubeconfig files.
 - Do not request that an operator paste secrets into a chat, issue or PR. Use private provider stores and references.
-- Public CI has no cloud credentials and must not plan or apply against real infrastructure. Do not use pull_request_target or workflow_run to execute untrusted contributions with elevated permissions.
-- Pin external Actions to verified full commit SHAs. Keep public CI permissions read-only.
-- Each resource has one declared infrastructure owner: its Stack or a documented bootstrap root. Document ownership transfer before moving state. Never let old and new configurations manage the same resource concurrently.
+- Public validation, fork pipelines and merge-request pipelines have no cloud or state credentials. Do not use pull_request_target or workflow_run to execute untrusted contributions with elevated permissions.
+- The maintainer authorizes cloud execution from this public GitLab repository on its protected deploy branch. Gate cloud jobs on the exact project, protected branch and approved pipeline sources; enforce project/namespace IDs, audience and protected branch in GCP OIDC trust too. GitHub remains a validation-only mirror. Do not grant cloud access merely because a job requests an ID token.
+- Cloud access uses short-lived OIDC credentials and separate plan/apply service accounts. An apply requires explicit approval of its concrete plan; merge alone does not authorize apply. Restrict pipeline logs and artifacts to project members before enabling real execution. Keep state in the existing private GitLab project and private inputs in protected CI variables; never expose state or plan contents in public MR comments.
+- Pin external Actions and CI components to verified full commit SHAs. Keep validation job permissions read-only.
+- Each resource has one declared owner: a Terragrunt unit, retained HCP Stack, documented bootstrap root or the selected Flux runtime reconciler. Document ownership transfer before moving state. Never let old and new configurations manage the same resource concurrently.
 - Product users, including Clerk users, are not platform administrators.
 - Administrative MCP starts read-only. No arbitrary shell/cloud API tool and no autonomous production apply. A tool annotation or prompt is not authorization.
 - Do not provision resources, merge infrastructure changes, migrate state or rotate credentials without an explicitly approved operation.
@@ -27,7 +29,7 @@ For any Terraform task, including infrastructure design, dependency selection an
 
 Read docs/implementation.md and the relevant ADR. Complete the smallest testable acceptance slice, not every planned directory. Mark capabilities as planned, implemented or cloud-tested. Do not claim a module is operational based only on fmt/validate.
 
-Reusable modules have typed inputs and outputs, no embedded provider credentials, no deployment-specific defaults and no backend configuration. HCP Stack composition and bootstrap root modules own provider/state wiring. Stacks need their own validation; terraform validate on a classic module is not a Stack validation substitute.
+Reusable modules have typed inputs and outputs, no embedded provider credentials, no deployment-specific defaults and no backend configuration. Terragrunt units own generated provider/backend wiring and separate stable GitLab state IDs for new cloud work. Credentials stay in the execution environment. Retained HCP sources keep their original provider/state semantics until a reviewed conversion. Validate each actual composition format; classic module validation does not validate either kind of Stack.
 
 Keep cloud semantics explicit: Cloud Run and ECS are not identical runtimes. Kubernetes, NAT, HA databases, HSM and cross-cloud networking are opt-in capabilities, not mandatory baseline costs.
 
